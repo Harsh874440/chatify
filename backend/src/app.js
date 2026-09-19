@@ -10,8 +10,11 @@ const app=express();
 
 app.listen(3000,()=>{
     console.log("server listining to the port 3000 hi");
-    connect();
+    connect()
 })
+
+
+app.use(express.json());
 
 
 app.use("/api/auth" ,authRouter)

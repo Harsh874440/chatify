@@ -10,7 +10,7 @@ router.get("/login",login );
 router.get("/logout" ,logout );
 
 
-router.get("/signup",signup );
+router.post("/signup",signup );
 
 
 export default router;
