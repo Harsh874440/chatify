@@ -1,3 +1,4 @@
+import { generateTocken } from "../lib/utils.js";
 import  User from "../models/user.js";
 import bcrypt from "bcryptjs";
 
@@ -5,10 +6,12 @@ export const signup = async (req,res)=>{
     let {name,email,password} =req.body;
     try{
      if(!name || !email || !password){
-        res.send("404 all the details should be filled");
+        return res.status(400).json({
+    message: "All details should be filled"
+});
      }
 
-     if(password<6){
+     if(password.length<6){
         res.send("password should be atlest of 6 characters ");
      }
      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -17,35 +20,48 @@ export const signup = async (req,res)=>{
      return res.status(400).json({
         message: "Invalid email format"
     });
+}
     
     let user =  await User.findOne({email});
     if(user){
-        res.status("400" ,json({message :"user already registered"}));
+        return res.status(400).json({
+    message: "User already registered"
+});
     }
 
-    const salt =bcrypt.genSalt(10);
-    const hashedPassword=bcrypt.hash(password,salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword= await bcrypt.hash(password,salt);
     
      const newUser = new User ({
         name,
         email,
         password:hashedPassword,
      })
-     
+       await newUser.save();
 
      if(newUser){
      
+         generateTocken(newUser._id,res);
+        
 
-         await newUser.save();
-     }else{
-        res.send("erroe making the user ");
+         console.log("newuser created",newUser)
+         res.status(201).json({
+            _id:newUser._id,
+            name:newUser.name,
+            email:newUser.email,
+            
+         })
      }
 } 
-    }catch(err){
 
+    catch(err){
+         return res.status(500).json({
+    message: "Error while creating user",
+    error: err.message
+});
     }
-}
 
+}
 
 export const login =async (req,res)=>{
     res.send("loogin route");

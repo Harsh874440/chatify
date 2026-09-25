@@ -4,6 +4,7 @@ import dotenv from"dotenv";
 dotenv.config();
 import authRouter from "./router/auth.js";
 import messageRouter from "./router/message.js";
+import { generateTocken} from "./lib/utils.js";
 
 import {connect} from "./lib/db.js";
 const app=express();
