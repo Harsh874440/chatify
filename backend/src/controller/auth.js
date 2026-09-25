@@ -1,6 +1,9 @@
 import { generateTocken } from "../lib/utils.js";
 import  User from "../models/user.js";
 import bcrypt from "bcryptjs";
+import { sendWelcomeEmail } from "../emails/emailHandeller.js";
+import dotenv from "dotenv"
+dotenv.config();
 
 export const signup = async (req,res)=>{
     let {name,email,password} =req.body;
@@ -52,6 +55,10 @@ export const signup = async (req,res)=>{
             
          })
      }
+      
+      
+    await  sendWelcomeEmail(newUser.email,newUser.name,process.env.CLIENT_URL);
+
 } 
 
     catch(err){
