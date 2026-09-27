@@ -6,8 +6,8 @@ import { logout } from "../controller/auth.js";
 const router = express.Router();
 
 
-router.get("/login",login );
-router.get("/logout" ,logout );
+router.post("/login",login );
+router.post("/logout" ,logout );
 
 
 router.post("/signup",signup );

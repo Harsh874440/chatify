@@ -71,7 +71,31 @@ export const signup = async (req,res)=>{
 }
 
 export const login =async (req,res)=>{
-    res.send("loogin route");
+   const {email,password}=req.body;
+
+
+   let user= await User.findOne({email});
+
+   
+
+
+   if(!user){
+    return res.status(400).json({message:"Invalid credentials"});
+   }
+   let isPasswordCorrect= await bcrypt.compare(password,user.password);
+
+   if(!isPasswordCorrect){
+    return res.status(400).json({message:"Invalid credentials"});
+   }
+
+
+   generateTocken(user._id,res);
+   console.log("user logined")
+         res.status(201).json({
+            _id:user._id,
+            name:user.name,
+            email:user.email,
+})
 }
 
 export const logout=async(req,res)=>{
