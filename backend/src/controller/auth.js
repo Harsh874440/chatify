@@ -102,3 +102,8 @@ export const logout=async(req,res)=>{
   res.cookie("jwt","",{maxAge:0});
   res.status(200).json({message:"user logged out"});
 }
+
+
+export const update=async(req,res)=>{
+
+}
